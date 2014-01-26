@@ -6,22 +6,18 @@
   "main": "app.js",
   "private": true,
   "keywords": [
-    "express",
-    "socket",
-    "log4j",
-    "node-chat",
+    "excel",
     "node"
   ],
   "scripts": {
     "start": "node app.js"
   },
-  "repository": "https://github.com/yinuoba/node-chat.git",
+  "repository": "https://github.com/yinuoba/excel2html.git",
   "engines": {
     "node": ">=0.8"
   },
   "dependencies": {
     "underscore": "*",
-    "jquery": "*",
     "node-xlsx": "*"
   }
 }

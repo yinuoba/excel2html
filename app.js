@@ -1,42 +1,40 @@
 var fs = require('fs');
 var _ = require('underscore');
 var xlsx = require('node-xlsx');
+var path = require('path');
+
+var excelPath = 'excel/amountexcel.xlsx';
+var baseFolder = path.basename(excelPath, '.xlsx');
 
 // read
-var obj = xlsx.parse('excel/amountexcel.xlsx');
+var obj = xlsx.parse(excelPath);
 
 var dataArr = obj['worksheets'];
-var trArr = [],
-  bgcolor = '',
-  trStr = '',
-  nameArr = [];
+var trArr = [], bgcolor = '', trStr = '';
 
-var header = '';
-var footer = '';
+var getYMD = function(date){
+  date = date || new Date();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  if(month < 10){
+    month = '0' + month;
+  }
+  if(day < 10){
+    day = '0' + day;
+  }
+  return date.getFullYear() + '' + month + day;
+};
 
 // 读取头部文件
-fs.readFileSync('tpl/header.html', {encoding: 'utf-8'}, function(err, data) {
-  if (!err) {
-    header = data;
-  } else {
-    console.log(err);
-  }
-});
+var header = fs.readFileSync('tpl/header.html', 'utf8');
 
 // 读取尾部文件
-fs.readFileSync('tpl/footer.html', {encoding: 'utf-8'}, function(err, data) {
-  if (!err) {
-    footer = data;
-  } else {
-    console.log(err);
-  }
-});
-
+var footer = fs.readFileSync('tpl/footer.html', 'utf8');
 
 // 根据数据和bgcolor创建tr字符串
 var createTr = function(dataObj, bgcolor){
   var str = '<tr>\n';
-  for (var k = 0; k < dataObj.length; k++) {  // 循环行中的列
+  for (var k = 1; k < dataObj.length; k++) {  // 循环行中的列
     var singleObj = dataObj[k];
     str += '  <td align="center" bgcolor="' + bgcolor + '" style="line-height: 22px; padding:9px 0; color:#333333; font-size:12px;">' + singleObj['value'] + '</td>\n';
   }
@@ -44,7 +42,7 @@ var createTr = function(dataObj, bgcolor){
   return str;
 };
 
-// 删除trsource下的所有文件，并创建一个新的trsource文件夹
+// 删除baseFolder下的所有文件，并创建一个新的baseFolder文件夹
 var rmdirSync = (function() {
   function iterator(url, dirs) {
     var stat = fs.statSync(url);
@@ -56,10 +54,10 @@ var rmdirSync = (function() {
     }
   }
 
-  function inner(path, dirs) {
-    var arr = fs.readdirSync(path);
+  function inner(pathname, dirs) {
+    var arr = fs.readdirSync(pathname);
     for (var i = 0, el; el = arr[i++];) {
-      iterator(path + "/" + el, dirs);
+      iterator(pathname + "/" + el, dirs);
     }
   }
   return function(dir, cb) {
@@ -77,13 +75,13 @@ var rmdirSync = (function() {
   }
 })();
 
-rmdirSync("trsource", function(e){
-  console.log("删除trsource目录以及子目录成功")
+rmdirSync(baseFolder, function(e){
+  console.log("删除" + baseFolder + "目录以及子目录成功")
 })
 
-// 重新创建trsource目录
-fs.mkdir('trsource', function(){
-  console.log("创建trsource目录成功");
+// 重新创建baseFolder目录
+fs.mkdir(baseFolder, function(){
+  console.log("创建" + baseFolder + "目录成功");
 });
 
 // 循环html，生成对应用户的html文件（含tr）
@@ -103,33 +101,13 @@ for (var i = 0; i < dataArr.length; i++) {  // 循环各个sheet
     trStr = createTr(data[j], bgcolor);
 
     // 将本行数据添加到对应用户的html文件中
-    fs.appendFileSync('trsource/' + username + '.html', trStr, 'utf8', function(err) {
-      if (err) {
-        console.log('写入文件失败');
-      } else {
-        console.log('数据已写入到 ' + 'trsource/' + username + '.html文件中');
-      }
-    });
+    fs.appendFileSync(baseFolder + '/' + username + '.html', trStr, 'utf8');
   }
 }
-
 // 替换html中的内容，把头尾加上
-fs.readdirSync('trsource', function(err, files){
-  files.forEach(function(file){
-    fs.readFileSync('trsource/' + file, {encoding: 'utf-8'}, function(err, data) {
-      if (!err) {
-        var htmlStr = header + data + footer;
-        fs.writeFileSync('trsource/' + file, htmlStr, 'utf8', function(err) {
-          if (err) {
-            console.log('写入文件失败');
-          } else {
-            console.log('数据已写入到 ' + 'trsource/' + file + '文件中');
-          }
-        });
-      } else {
-        console.log(err);
-      }
-    });
-    
-  });
+var files = fs.readdirSync(baseFolder);
+files.forEach(function(file){
+  var fileData = fs.readFileSync(baseFolder + '/' + file, 'utf8');
+  var htmlStr = header + fileData + footer;
+  fs.writeFileSync(baseFolder + '/' + file, htmlStr, 'utf8');
 });
