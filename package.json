@@ -1,0 +1,27 @@
+{
+  "name": "readexcel",
+  "description": "An application to read excel files",
+  "author": "Hoogle<zeng.xianghu@hotmail.com>",
+  "version": "0.0.1",
+  "main": "app.js",
+  "private": true,
+  "keywords": [
+    "express",
+    "socket",
+    "log4j",
+    "node-chat",
+    "node"
+  ],
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": "https://github.com/yinuoba/node-chat.git",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "dependencies": {
+    "underscore": "*",
+    "jquery": "*",
+    "node-xlsx": "*"
+  }
+}
