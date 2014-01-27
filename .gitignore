@@ -43,6 +43,11 @@ lcov.info
 pids
 results
 build
+logs
 .grunt
 
+amountexcel.xlsx
+
 node_modules
+
+amountexcel

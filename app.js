@@ -6,7 +6,7 @@ var util = require('./commonjs/util');
 var logger = require('./commonjs/log').logger;
 var fsadd = require('./commonjs/fsadd.js');
 
-var excelPath = 'excel/demoexcel.xlsx';
+var excelPath = 'excel/amountexcel.xlsx';
 var baseFolder = path.basename(excelPath, '.xlsx');
 
 // 将excel数据解析为json数据
@@ -15,7 +15,8 @@ var dataArr = obj['worksheets'];
 
 var trArr = [],
   bgcolor = '',
-  trStr = '';
+  trStr = '',
+  countObj = {};
 
 // 添加日志间的间隔
 logger.info('--------------------------------------------------');
@@ -56,13 +57,20 @@ for (var i = 0; i < dataArr.length; i++) { // 循环各个sheet
   var data = dataArr[i]['data'];
 
   for (var j = 1; j < data.length; j++) { // 循环sheet的行
-    if (j % 2 === 0) {
+    // 取出这行数据的用户名
+    var username = data[j][0]['value']; // 数组的第一项就是username
+
+    if (typeof countObj[username] === 'undefined') {
+      countObj[username] = 0;
+    } else {
+      countObj[username] += 1;
+    }
+
+    if(countObj[username] % 2 == 0){
       bgcolor = '#ffffff';
     } else {
       bgcolor = '#d3e6f4';
     }
-
-    var username = data[j][0]['value']; // 数组的第一项就是username
 
     // 生成本行数据的字符串
     trStr = createTr(data[j], bgcolor);
@@ -77,8 +85,22 @@ var files = fs.readdirSync(baseFolder);
 
 // 遍历目录下的所有文件，将头尾模版加入文件中
 files.forEach(function(file) {
+  // 先同步取出当前文件内容
   var fileData = fs.readFileSync(baseFolder + '/' + file, 'utf8');
-  var htmlStr = header + fileData + footer;
+
+  // 根据当前文件名取出当前文件对应的用户名
+  var username = file.split('.html')[0];
+
+  // 先把全局的header赋给headTmp
+  var headTmp = header;
+  
+  // 将用户名替换成相对应的用户名
+  headTmp = headTmp.replace(/{%username%}/, username);
+
+  // 拼出完整的文件内容
+  var htmlStr = headTmp + fileData + footer;
+
+  // 将新的文件内容写入当前文件
   fs.writeFileSync(baseFolder + '/' + file, htmlStr, 'utf8');
   logger.info(baseFolder + '/' + file + ' 文件创建成功');
 });
