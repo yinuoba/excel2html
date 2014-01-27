@@ -39,11 +39,11 @@ lcov.info
 *.out
 *.pid
 *.gz
+*.log*
 
 pids
 results
 build
-logs
 .grunt
 
 amountexcel.xlsx
