@@ -12,6 +12,8 @@ var baseFolder = path.basename(excelPath, '.xlsx');
 // 将excel数据解析为json数据
 var obj = xlsx.parse(excelPath);
 var dataArr = obj['worksheets'];
+var postmonth = util.getMonth();
+var postdate = '2013.01.23';
 
 var trArr = [],
   bgcolor = '',
@@ -91,14 +93,19 @@ files.forEach(function(file) {
   // 根据当前文件名取出当前文件对应的用户名
   var username = file.split('.html')[0];
 
-  // 先把全局的header赋给headTmp
-  var headTmp = header;
+  // 先把全局的header赋给headerTmp
+  var headerTmp = header;
+  var footerTmp = footer;
   
   // 将用户名替换成相对应的用户名
-  headTmp = headTmp.replace(/{%username%}/, username);
+  headerTmp = headerTmp.replace(/{%username%}/, username);
+  headerTmp = headerTmp.replace(/{%postmonth%}/g, postmonth);
+
+  // 替换出账日期
+  footerTmp = footerTmp.replace(/{%postdate%}/, postdate);
 
   // 拼出完整的文件内容
-  var htmlStr = headTmp + fileData + footer;
+  var htmlStr = headerTmp + fileData + footerTmp;
 
   // 将新的文件内容写入当前文件
   fs.writeFileSync(baseFolder + '/' + file, htmlStr, 'utf8');
