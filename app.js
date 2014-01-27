@@ -6,7 +6,7 @@ var util = require('./commonjs/util');
 var logger = require('./commonjs/log').logger;
 var fsadd = require('./commonjs/fsadd.js');
 
-var excelPath = 'excel/amountexcel.xlsx';
+var excelPath = 'excel/demoexcel.xlsx';
 var baseFolder = path.basename(excelPath, '.xlsx');
 
 // 将excel数据解析为json数据
