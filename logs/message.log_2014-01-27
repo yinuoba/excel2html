@@ -1,0 +1,15 @@
+[2014-01-27 13:56:18.979] [INFO] logger - --------------------------------------------------
+[2014-01-27 14:08:47.521] [INFO] logger - **************************************************
+[2014-01-27 14:08:47.572] [INFO] logger - 删除emailhtml/demoexcel目录以及子目录成功
+[2014-01-27 14:08:47.574] [INFO] logger - 创建emailhtml/demoexcel目录成功
+[2014-01-27 14:08:47.687] [INFO] logger - emailhtml/demoexcel/aaaaaa.html 文件创建成功
+[2014-01-27 14:08:47.689] [INFO] logger - emailhtml/demoexcel/bbbbbb.html 文件创建成功
+[2014-01-27 14:08:47.692] [INFO] logger - emailhtml/demoexcel/cccccc.html 文件创建成功
+[2014-01-27 14:08:47.695] [INFO] logger - emailhtml/demoexcel/dddddd.html 文件创建成功
+[2014-01-27 14:08:47.697] [INFO] logger - emailhtml/demoexcel/eeeeee.html 文件创建成功
+[2014-01-27 14:08:47.700] [INFO] logger - emailhtml/demoexcel/ffffff.html 文件创建成功
+[2014-01-27 14:08:47.703] [INFO] logger - emailhtml/demoexcel/gggggg.html 文件创建成功
+[2014-01-27 14:08:47.706] [INFO] logger - emailhtml/demoexcel/hhhhhh.html 文件创建成功
+[2014-01-27 14:08:47.709] [INFO] logger - emailhtml/demoexcel/iiiiii.html 文件创建成功
+[2014-01-27 14:08:47.713] [INFO] logger - emailhtml/demoexcel/jjjjjj.html 文件创建成功
+[2014-01-27 14:08:47.715] [INFO] logger - emailhtml/demoexcel/kkkkkk.html 文件创建成功
