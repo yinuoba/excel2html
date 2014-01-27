@@ -10,7 +10,7 @@ var fsadd = require('./commonjs/fsadd.js');
 logger.info('--------------------------------------------------');
 
 var postmonth = util.getMonth();
-var postdate = '2013.01.23';
+var postdate = '2014.01.23';
 
 // 找出所有的excel文件
 var excelFiles = fs.readdirSync('excel');
