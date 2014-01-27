@@ -33,7 +33,9 @@ excelFiles.forEach(function(excelfile){
   var trArr = [],
     bgcolor = '',
     trStr = '',
-    countObj = {};
+    countObj = {},
+    amountObj = {},
+    gainObj = {};
 
   // 读取头部文件
   var header = fs.readFileSync('tpl/header.html', 'utf8');
@@ -42,7 +44,14 @@ excelFiles.forEach(function(excelfile){
   var footer = fs.readFileSync('tpl/footer.html', 'utf8');
 
   // 根据数据和bgcolor创建tr字符串
-  var createTr = function(dataObj, bgcolor) {
+  var createTr = function(dataObj, bgcolor, username) {
+    if(typeof amountObj[username] === 'undefined'){
+      amountObj[username] = 0;
+      gainObj[username] = 0;
+    }
+    amountObj[username] = util.dcmAdd(amountObj[username], dataObj[3]['value']);
+    gainObj[username] = util.dcmAdd(gainObj[username], dataObj[5]['value']);
+
     var str = '<tr>\n';
     for (var k = 1; k < dataObj.length; k++) { // 循环行中的列
       var singleObj = dataObj[k];
@@ -86,7 +95,7 @@ excelFiles.forEach(function(excelfile){
       }
 
       // 生成本行数据的字符串
-      trStr = createTr(data[j], bgcolor);
+      trStr = createTr(data[j], bgcolor, username);
 
       // 将本行数据添加到对应用户的html文件中
       fs.appendFileSync(baseFolder + '/' + username + '.html', trStr, 'utf8');
@@ -111,6 +120,8 @@ excelFiles.forEach(function(excelfile){
     // 将用户名替换成相对应的用户名
     headerTmp = headerTmp.replace(/{%username%}/, username);
     headerTmp = headerTmp.replace(/{%postmonth%}/g, postmonth);
+    headerTmp = headerTmp.replace(/{%useramount%}/g, amountObj[username]);
+    headerTmp = headerTmp.replace(/{%usergain%}/g, gainObj[username]);
 
     // 替换出账日期
     footerTmp = footerTmp.replace(/{%postdate%}/, postdate);
